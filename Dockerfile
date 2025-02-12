@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 # Build Backend
-FROM --platform=$BUILDPLATFORM golang:1.23-alpine3.21 AS builder
+FROM --platform=$BUILDPLATFORM golang:1.24-alpine3.21 AS builder
 
 LABEL org.opencontainers.image.title="Minetest Skin Server"
 LABEL org.opencontainers.image.description="Skin server for the Minetest engine"
