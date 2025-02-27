@@ -79,7 +79,7 @@ jobs:
 
       - name: Attest Build Provenance
         if: github.event_name != 'pull_request'
-        uses: actions/attest-build-provenance@v1.3.3
+        uses: actions/attest-build-provenance@v2.2.2
         with:
           subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           subject-digest: ${{ steps.build-and-push.outputs.digest }}
