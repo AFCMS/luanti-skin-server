@@ -1,11 +1,11 @@
 # syntax=docker/dockerfile:1
 
 # Build Backend
-FROM --platform=$BUILDPLATFORM golang:1.23-alpine3.21 AS builder
+FROM --platform=$BUILDPLATFORM golang:1.24-alpine3.21 AS builder
 
-LABEL org.opencontainers.image.title="Minetest Skin Server"
-LABEL org.opencontainers.image.description="Skin server for the Minetest engine"
-LABEL org.opencontainers.image.authors="AFCM <afcm.contact@gmail.com>"
+LABEL org.opencontainers.image.title="Luanti Skin Server"
+LABEL org.opencontainers.image.description="Skin server for the Luanti engine"
+LABEL org.opencontainers.image.authors="AFCMS <afcm.contact@gmail.com>"
 LABEL org.opencontainers.image.licenses="GPL-3.0"
 LABEL org.opencontainers.image.source="https://github.com/AFCMS/luanti-skin-server"
 
