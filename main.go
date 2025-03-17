@@ -17,13 +17,11 @@ import (
 
 func main() {
 	// Check for Oxipng installation
-	if utils.ConfigOptipngEnabled {
-		oxipngPresent := utils.OxipngPresent()
-		if oxipngPresent {
-			log.Println("Oxipng found")
-		} else {
-			log.Fatalln("Oxipng not found")
-		}
+	oxipngPresent := utils.OxipngPresent()
+	if oxipngPresent {
+		log.Println("Oxipng found")
+	} else {
+		log.Fatalln("Oxipng not found")
 	}
 
 	// Connection to Database

@@ -92,35 +92,33 @@ files will trigger fast refresh without needing to restart the entire app.
 
 It's possible to run the server without Docker, but it's not recommended.
 
-#### 1. Install Go and NodeJS
+#### 1. Install Go, NodeJS and Oxipng
 
 Follow the official guides for you OS.
 
 I recommend using NodeJS v20 installed using [**nvm**](https://github.com/nvm-sh/nvm) under linux.
 
-#### 2. (Optional) Install Oxipng
+Oxipng instructions can be found [here](https://github.com/shssoichiro/oxipng)
 
-If you want to enable [Oxipng](https://github.com/shssoichiro/oxipng), you need to install it.
-
-#### 3. Download source code
+#### 2. Download source code
 
 ```shell
 git clone https://github.com/AFCMS/luanti-skin-server && cd luanti-skin-server
 ```
 
-#### 4. Install Go dependencies
+#### 3. Install Go dependencies
 
 ```shell
 go mod download
 ```
 
-#### 5. Install NodeJS dependencies
+#### 4. Install NodeJS dependencies
 
 ```shell
 cd frontend && npm install --include=dev && cd ..
 ```
 
-#### 6. Configure server
+#### 5. Configure server
 
 ```shell
 cp exemple.env .env
@@ -132,7 +130,6 @@ A typical development config would be:
 
 ```ini
 MT_SKIN_SERVER_DATABASE_LOGGING=false
-MT_SKIN_SERVER_ENABLE_OPTIPNG=true
 
 MT_SKIN_SERVER_DB_HOST=db
 MT_SKIN_SERVER_DB_USER=user
@@ -143,7 +140,7 @@ MT_SKIN_SERVER_DB_NAME=skin_server
 
 You need a PostgreSQL database running on the given host and port.
 
-#### 7. Frontend
+#### 6. Frontend
 
 The frontend served by the Fiber backend can be build before running the app and served statically, the Vite development
 server can also be proxied by the backend to avoid rebuilding everytime.
@@ -172,7 +169,7 @@ MT_SKIN_SERVER_FRONTEND_URL=http://localhost:5173
 > can change this
 > behaviour in the Vite configuration.
 
-#### 8. Build and run backend
+#### 7. Build and run backend
 
 ```shell
 go build && ./luanti-skin-server

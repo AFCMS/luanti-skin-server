@@ -13,7 +13,6 @@ var (
 	// ConfigFrontendURL is the URL of the frontend when in development mode
 	ConfigFrontendURL        string
 	ConfigDebugDatabase      bool
-	ConfigOptipngEnabled     bool
 	ConfigVerificationGoogle string
 	ConfigOAuthRedirectHost  string
 	// ConfigOAuthContentDB is the ContentDB OAuth enabled
@@ -49,13 +48,6 @@ func loadConfig() {
 		ConfigDebugDatabase = str == "true"
 	} else {
 		ConfigDebugDatabase = false
-	}
-
-	str, isPresent = os.LookupEnv("MT_SKIN_SERVER_ENABLE_OPTIPNG")
-	if isPresent {
-		ConfigOptipngEnabled = str == "true"
-	} else {
-		ConfigOptipngEnabled = true
 	}
 
 	str, isPresent = os.LookupEnv("MT_SKIN_SERVER_VERIFICATION_GOOGLE_SEARCH_CONSOLE")
