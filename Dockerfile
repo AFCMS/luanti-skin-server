@@ -1,4 +1,5 @@
 # syntax=docker/dockerfile:1
+# check=error=true
 
 # Build Backend
 FROM --platform=$BUILDPLATFORM golang:1.24-alpine3.21 AS builder
