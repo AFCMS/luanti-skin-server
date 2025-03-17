@@ -196,6 +196,11 @@ You can verify that the image have been really built by the GitHub Actions workf
 gh attestation verify oci://ghcr.io/afcms/luanti-skin-server:master --repo AFCMS/luanti-skin-server
 ```
 
+> [!NOTE]
+> The server doesn't have TLS support, to keep it as minimal as possible.
+>
+> TLS should be handled by a reverse proxy like [Caddy](https://caddyserver.com) or [Traefik](https://traefik.io), which allow easy use of Let's Encrypt, Cloudflare certificates, etc.
+
 #### Configuration
 
 For production the server supports some more configuration variables.
