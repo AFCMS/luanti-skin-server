@@ -33,7 +33,7 @@ func main() {
 
 	// Init Web Server
 	app := fiber.New(fiber.Config{
-		AppName:       "Minetest Skin Server",
+		AppName:       "Luanti Skin Server",
 		CaseSensitive: false,
 		Views:         engine,
 	})
