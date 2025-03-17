@@ -70,7 +70,6 @@ A typical production config would be:
 
 ```ini
 MT_SKIN_SERVER_DATABASE_LOGGING=false
-MT_SKIN_SERVER_ENABLE_OPTIPNG=true
 
 MT_SKIN_SERVER_DB_HOST=db
 MT_SKIN_SERVER_DB_USER=user
@@ -194,9 +193,9 @@ gh attestation verify oci://ghcr.io/afcms/luanti-skin-server:master --repo AFCMS
 ```
 
 > [!NOTE]
-> The server doesn't have TLS support, to keep it as minimal as possible.
+> The server doesn't have TLS support, to keep it as minimal as possible. Fiber don't support HTTP/2 and HTTP/3 yet anyways.
 >
-> TLS should be handled by a reverse proxy like [Caddy](https://caddyserver.com) or [Traefik](https://traefik.io), which allow easy use of Let's Encrypt, Cloudflare certificates, etc.
+> TLS should be handled by a reverse proxy like [Caddy](https://caddyserver.com) or [Traefik](https://traefik.io), which support HTTP/3 and allow easy use of Let's Encrypt, Cloudflare certificates, etc.
 
 #### Configuration
 
