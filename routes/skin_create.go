@@ -58,17 +58,14 @@ func SkinCreate(c fiber.Ctx) error {
 	}
 	headB := headBuffer.Bytes()
 
-	var skinBOpti = skinB
-	var headBOpti = headB
-
-	// Optionally run Oxipng
+	// Run Oxipng
 	// TODO: Run them async to get them done faster
 	// https://stackoverflow.com/questions/27792389/golang-functions-parallel-execution-with-return
 
-	var out1 []byte
+	var skinBOpti []byte
 	var err1 error
 
-	var out2 []byte
+	var headBOpti []byte
 	var err2 error
 
 	var sg sync.WaitGroup
@@ -78,21 +75,18 @@ func SkinCreate(c fiber.Ctx) error {
 	go func(out *[]byte, err *error, sg *sync.WaitGroup) {
 		*out, *err = utils.OxipngBytes(skinB)
 		sg.Done()
-	}(&out1, &err1, &sg)
+	}(&skinBOpti, &err1, &sg)
 
 	go func(out *[]byte, err *error, sg *sync.WaitGroup) {
 		*out, *err = utils.OxipngBytes(headB)
 		sg.Done()
-	}(&out2, &err2, &sg)
+	}(&headBOpti, &err2, &sg)
 
 	sg.Wait()
 
 	if err1 != nil || err2 != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(utils.ErrorOutput{Message: "Server error", Data: "Cannot obtimize image"})
 	}
-
-	skinBOpti = out1
-	headBOpti = out2
 
 	// Create entry in database
 	var l = models.Skin{
