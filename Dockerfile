@@ -30,7 +30,7 @@ COPY . ./
 # https://dev.to/jacktt/20x-faster-golang-docker-builds-289n
 RUN --mount=type=cache,id=gomod,target="/go/pkg/mod" \
     --mount=type=cache,id=gobuild,target="/root/.cache/go-build" \
-    CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -o luanti-skin-server .
+    CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -ldflags="-s -w" -o luanti-skin-server .
 
 # Build Frontend
 FROM --platform=$BUILDPLATFORM node:20-alpine3.21 AS frontend-builder
