@@ -46,6 +46,6 @@ jobs:
           cache: false
 
       - name: Lint with GolangCI
-        uses: golangci/golangci-lint-action@v5
+        uses: golangci/golangci-lint-action@v7
         with:
           version: latest
