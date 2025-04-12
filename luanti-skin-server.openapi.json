@@ -1,0 +1,194 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Luanti Skin Server",
+    "description": "",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://127.0.0.1:8081",
+      "description": "Development server"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "permission_level": {
+        "type": "integer",
+        "enum": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "enumDescriptions": [
+          "Base",
+          "Trusted",
+          "Moderator",
+          "Admin"
+        ]
+      },
+      "user": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "username": {
+            "type": "string"
+          },
+          "permission_level": {
+            "$ref": "#/components/schemas/permission_level"
+          },
+          "banned": {
+            "type": "boolean"
+          },
+          "ban_reason": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "last_connection": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/api/info": {
+      "get": {
+        "description": "Get server informations",
+        "responses": {
+          "200": {
+            "description": "Server informations",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "version": {
+                      "type": "string"
+                    },
+                    "account_count": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "skin_count": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "supported_oauth_providers": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "contentdb",
+                          "github"
+                        ]
+                      },
+                      "uniqueItems": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "text/plain": {}
+            }
+          }
+        }
+      }
+    },
+    "/api/account/user": {
+      "get": {
+        "description": "Get the user informations",
+        "responses": {
+          "200": {
+            "description": "User informations",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "username": {
+                      "type": "string"
+                    },
+                    "permission_level": {
+                      "$ref": "#/components/schemas/permission_level"
+                    },
+                    "cdb_username": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "text/plain": {}
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "text/plain": {}
+            }
+          }
+        }
+      }
+    },
+    "/api/users": {
+    },
+    "/api/users/{id}": {
+      "get": {
+        "description": "Get a user infos by id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User informations",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/user"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "text/plain": {}
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "text/plain": {}
+            }
+          }
+        }
+      }
+    }
+  }
+}
