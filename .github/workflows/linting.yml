@@ -24,7 +24,7 @@ jobs:
       - name: Set up NodeJS
         uses: actions/setup-node@v4
         with:
-          node-version: "lts/iron"
+          node-version-file: ".nvmrc"
 
       - name: Install dependencies
         run: cd $GITHUB_WORKSPACE/frontend && npm ci
