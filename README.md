@@ -19,7 +19,7 @@ The server is build with the [**Go**](https://go.dev) language on-top of the [**
 
 It uses also the [**GORM**](https://gorm.io) library for interacting with the database.
 
-The frontend is build with the [**React**](https://reactjs.org) library, the [**Vite**](https://vitejs.dev) framework
+The frontend is build with the [**React**](https://react.dev) library, the [**Vite**](https://vite.dev) framework
 and the following libraries:
 
 - [**TailwindCSS**](https://tailwindcss.com) for styling
