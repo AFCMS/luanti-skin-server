@@ -91,7 +91,6 @@ func SkinCreate(c fiber.Ctx) error {
 	// Create entry in database
 	var l = models.Skin{
 		Description: form.Value["description"][0],
-		Public:      form.Value["public"][0] == "true",
 		Owner:       user,
 		Data:        skinBOpti,
 		DataHead:    headBOpti,

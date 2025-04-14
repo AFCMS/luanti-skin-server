@@ -14,7 +14,7 @@ func AuthHandler(c fiber.Ctx) error {
 	c.Locals("logged_in", true)
 	sess, err := auth.SessionStore.Get(c)
 	if err != nil {
-		return c.SendStatus(fiber.StatusInternalServerError)
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"message": "Session error", "data": err.Error()})
 	}
 
 	if v, ok := sess.Get("uid").(uint); !ok || v == 0 {

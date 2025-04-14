@@ -17,7 +17,7 @@ var SessionMiddleware fiber.Handler
 
 func Initialize(app *fiber.App) {
 	SessionMiddleware, SessionStore = session.NewWithStore(session.Config{
-		Storage:           memory.New(), // TODO: use Redis
+		Storage:           memory.New(), // TODO: allow to use Redis
 		KeyLookup:         "cookie:session_id",
 		CookieDomain:      "",
 		CookiePath:        "",

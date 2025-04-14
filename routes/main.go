@@ -44,17 +44,14 @@ func SetupRoutes(app *fiber.App) {
 	}
 
 	// Interacting with skins
-	apiSkin := api.Group("/skin")
+	apiSkin := api.Group("/skins")
 
 	apiSkin.Get("/list", SkinList)
-	apiSkin.Get("/skin/:uuid<guid>", SkinDetails)
-	apiSkin.Get("/skin/:uuid<guid>/full", SkinFull)
-	apiSkin.Get("/skin/:uuid<guid>/head", SkinHead)
-	apiSkin.Post("/skin/:uuid<guid>/approve", SkinApprove, middleware.AuthHandler, middleware.PermissionHandler(models.PermissionLevelApprover))
-	apiSkin.Post("/skin/:uuid<guid>/delete", NotImplemented, middleware.AuthHandler)
+	apiSkin.Get("/:uuid<guid>", SkinDetails)
+	apiSkin.Get("/:uuid<guid>/full", SkinFull)
+	apiSkin.Get("/:uuid<guid>/head", SkinHead)
+	apiSkin.Post("/:uuid<guid>/delete", NotImplemented, middleware.AuthHandler)
 	apiSkin.Post("/create", SkinCreate, middleware.AuthHandler)
-	apiSkin.Get("/recent", SkinRecent)
-	apiSkin.Get("/rss", SkinRSS)
 
 	// Interacting with users
 	apiUsers := api.Group("/users")

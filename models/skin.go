@@ -10,8 +10,6 @@ import (
 type Skin struct {
 	UUID        uuid.UUID `json:"uuid" gorm:"primaryKey;type:uuid"`
 	Description string    `json:"description" gorm:"not null"`
-	Public      bool      `json:"public" gorm:"not null,default:true"`
-	Approved    bool      `json:"approved" gorm:"not null,default:false"`
 	OwnerID     uint      `json:"owner_id"`
 	Owner       Account   `json:"-" gorm:"not null"`
 	Data        []byte    `json:"-" gorm:"not null"`
