@@ -9,9 +9,9 @@
 This server is made for serving Luanti skins to Luanti servers. It is licensed under GPLv3.
 
 - ✅ Easy to use and powerful **API**
-- ✅ Skins compatible with both **VoxeLibre** and **Minetest Game**
-- ✅ Fast and reliable, thanks to **Docker**, **Golang**, **Fiber** and **PostgreSQL**
-- ✅ Optimised images using **Oxipng**
+- ✅ Skins compatible with both [**VoxeLibre**](https://content.luanti.org/packages/Wuzzy/mineclone2) and [**Minetest Game**](https://content.luanti.org/packages/Luanti/minetest_game)
+- ✅ Fast and reliable, thanks to [**Docker**](https://www.docker.com), [**Golang**](https://go.dev), [**Fiber**](https://gofiber.io) and [**PostgreSQL**](https://www.postgresql.org)
+- ✅ Optimised images using [**Oxipng**](https://github.com/shssoichiro/oxipng)
 
 ## Design
 
