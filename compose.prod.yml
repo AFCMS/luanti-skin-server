@@ -14,7 +14,10 @@ services:
       - db:/var/lib/postgresql/data
 
   server:
-    image: ghcr.io/afcms/luanti-skin-server:master
+    # image: ghcr.io/afcms/luanti-skin-server:master
+    build:
+      dockerfile: Dockerfile
+      target: production
     environment:
       - MT_SKIN_SERVER_DB_USER=${MT_SKIN_SERVER_DB_USER}
       - MT_SKIN_SERVER_DB_PASSWORD=${MT_SKIN_SERVER_DB_PASSWORD}

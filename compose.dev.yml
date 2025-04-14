@@ -13,17 +13,10 @@ services:
     volumes:
       - db:/var/lib/postgresql/data
 
-  server_frontend:
-    build: ./frontend
-    expose:
-      - "5173:5173"
-    volumes:
-      - type: bind
-        source: ./frontend
-        target: /frontend
-
   server:
-    build: .
+    build:
+      dockerfile: Dockerfile
+      target: development
     environment:
       - MT_SKIN_SERVER_DB_USER=${MT_SKIN_SERVER_DB_USER}
       - MT_SKIN_SERVER_DB_PASSWORD=${MT_SKIN_SERVER_DB_PASSWORD}
@@ -37,9 +30,11 @@ services:
       - MT_SKIN_SERVER_OAUTH_GITHUB_CLIENT_ID=${MT_SKIN_SERVER_OAUTH_GITHUB_CLIENT_ID}
       - MT_SKIN_SERVER_OAUTH_GITHUB_CLIENT_SECRET=${MT_SKIN_SERVER_OAUTH_GITHUB_CLIENT_SECRET}
       - MT_SKIN_SERVER_FRONTEND_DEV_MODE=true
-      - MT_SKIN_SERVER_FRONTEND_URL=http://server_frontend:5173
+      - MT_SKIN_SERVER_FRONTEND_URL=http://host.docker.internal:5173
     ports:
-      - "8080:8080"
+      - "8081:8081"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     depends_on:
       - db
 

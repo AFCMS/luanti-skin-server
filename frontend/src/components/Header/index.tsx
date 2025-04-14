@@ -1,10 +1,10 @@
-import { Fragment, useContext } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
-import { Disclosure, Menu, Transition } from "@headlessui/react";
+import { Fragment } from "react";
+import { NavLink } from "react-router-dom";
+import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import minetestIcon from "../../assets/minetest_logo.png";
 import profileImagePlaceholder from "../../assets/character_base_head.png";
-import { AppContext } from "../../services/AppContext.tsx";
+//import { AppContext } from "../../services/AppContext.tsx";
 
 const navigation: { name: string; href: string }[] = [
     { name: "Home", href: "/" },
@@ -12,10 +12,10 @@ const navigation: { name: string; href: string }[] = [
     { name: "About", href: "/about" },
 ];
 
-function Header(): JSX.Element {
-    const { loggedIn, logout, loadingUser, username } = useContext(AppContext);
+function Header() {
+    //const { loggedIn, logout, loadingUser, username } = useContext(AppContext);
 
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
     return (
         <>
@@ -32,7 +32,7 @@ function Header(): JSX.Element {
                                         <div className="hidden md:block">
                                             <div className="ml-10 flex items-baseline space-x-4">
                                                 {navigation.map((item) => (
-                                                    <Disclosure.Button
+                                                    <DisclosureButton
                                                         as={NavLink}
                                                         key={item.name}
                                                         to={item.href}
@@ -43,7 +43,7 @@ function Header(): JSX.Element {
                                                         }}
                                                     >
                                                         {item.name}
-                                                    </Disclosure.Button>
+                                                    </DisclosureButton>
                                                 ))}
                                             </div>
                                         </div>
@@ -59,11 +59,11 @@ function Header(): JSX.Element {
                                             </button>
 
                                             {/* Profile dropdown */}
-                                            {loggedIn ? (
+                                            {true ? (
                                                 <Menu as="div" className="relative ml-3">
                                                     <div>
-                                                        <Menu.Button
-                                                            className="flex max-w-xs items-center rounded bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200"
+                                                        <MenuButton
+                                                            className="flex max-w-xs items-center rounded bg-gray-800 text-sm focus:ring-2 focus:ring-blue-200 focus:outline-none"
                                                             aria-label="Open user menu"
                                                         >
                                                             <img
@@ -71,7 +71,7 @@ function Header(): JSX.Element {
                                                                 src={profileImagePlaceholder}
                                                                 alt=""
                                                             />
-                                                        </Menu.Button>
+                                                        </MenuButton>
                                                     </div>
                                                     <Transition
                                                         as={Fragment}
@@ -82,27 +82,27 @@ function Header(): JSX.Element {
                                                         leaveFrom="transform opacity-100 scale-100"
                                                         leaveTo="transform opacity-0 scale-95"
                                                     >
-                                                        <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                                                            <Menu.Item key={"logout"}>
+                                                        <MenuItems className="ring-opacity-5 absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black focus:outline-none">
+                                                            <MenuItem key={"logout"}>
                                                                 {({ active }) => (
                                                                     <button
                                                                         className={`${
                                                                             active ? "bg-slate-200" : ""
                                                                         } block w-full px-4 py-2 text-sm text-gray-700`}
                                                                         onClick={() => {
-                                                                            logout().then(() => {
+                                                                            /* logout().then(() => {
                                                                                 navigate("/");
-                                                                            });
+                                                                            }); */
                                                                         }}
                                                                     >
                                                                         Logout
                                                                     </button>
                                                                 )}
-                                                            </Menu.Item>
-                                                        </Menu.Items>
+                                                            </MenuItem>
+                                                        </MenuItems>
                                                     </Transition>
                                                 </Menu>
-                                            ) : !loadingUser ? (
+                                            ) : !false ? (
                                                 <div className="relative ml-3 flex space-x-4">
                                                     <NavLink to="/register" className="button-secondary">
                                                         Register
@@ -116,22 +116,22 @@ function Header(): JSX.Element {
                                     </div>
                                     <div className="-mr-2 flex md:hidden">
                                         {/* Mobile menu button */}
-                                        <Disclosure.Button className="inline-flex items-center justify-center rounded-md bg-gray-800 p-2 text-gray-400 hover:bg-gray-700 hover:text-white">
+                                        <DisclosureButton className="inline-flex items-center justify-center rounded-md bg-gray-800 p-2 text-gray-400 hover:bg-gray-700 hover:text-white">
                                             <span className="sr-only">Open main menu</span>
                                             {open ? (
                                                 <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
                                             ) : (
                                                 <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
                                             )}
-                                        </Disclosure.Button>
+                                        </DisclosureButton>
                                     </div>
                                 </div>
                             </div>
 
-                            <Disclosure.Panel className="md:hidden">
-                                <div className="space-y-1 px-2 pb-3 pt-2 sm:px-3">
+                            <DisclosurePanel className="md:hidden">
+                                <div className="space-y-1 px-2 pt-2 pb-3 sm:px-3">
                                     {navigation.map((item) => (
-                                        <Disclosure.Button
+                                        <DisclosureButton
                                             key={item.name}
                                             as={NavLink}
                                             to={item.href}
@@ -142,11 +142,11 @@ function Header(): JSX.Element {
                                             }}
                                         >
                                             {item.name}
-                                        </Disclosure.Button>
+                                        </DisclosureButton>
                                     ))}
                                 </div>
-                                <div className="border-t border-gray-700 pb-3 pt-4">
-                                    {loggedIn ? (
+                                <div className="border-t border-gray-700 pt-4 pb-3">
+                                    {true ? (
                                         <>
                                             <div className="flex items-center px-5">
                                                 <div className="flex-shrink-0">
@@ -157,45 +157,45 @@ function Header(): JSX.Element {
                                                     />
                                                 </div>
                                                 <div className="ml-3">
-                                                    <div className="text-base font-medium leading-none text-white">
-                                                        {username}
+                                                    <div className="text-base leading-none font-medium text-white">
+                                                        AFCMS
                                                     </div>
                                                 </div>
                                                 <button
                                                     type="button"
-                                                    className="ml-auto flex-shrink-0 rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                                                    className="ml-auto flex-shrink-0 rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-none"
                                                 >
                                                     <span className="sr-only">View notifications</span>
                                                     <BellIcon className="h-6 w-6" aria-hidden="true" />
                                                 </button>
                                             </div>
                                             <div className="mt-3 space-y-1 px-2">
-                                                <Disclosure.Button
+                                                <DisclosureButton
                                                     key={"logout"}
                                                     as={"button"}
                                                     className="block w-full rounded-md px-3 py-2 text-base font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
                                                     onClick={() => {
-                                                        logout().then(() => {
+                                                        /* logout().then(() => {
                                                             navigate("/");
-                                                        });
+                                                        }); */
                                                     }}
                                                 >
                                                     Logout
-                                                </Disclosure.Button>
+                                                </DisclosureButton>
                                             </div>
                                         </>
                                     ) : (
                                         <div className="relative ml-3 flex gap-2">
-                                            <Disclosure.Button as={NavLink} to="/register" className="button-secondary">
+                                            <DisclosureButton as={NavLink} to="/register" className="button-secondary">
                                                 Register
-                                            </Disclosure.Button>
-                                            <Disclosure.Button as={NavLink} to="/login" className="button-primary">
+                                            </DisclosureButton>
+                                            <DisclosureButton as={NavLink} to="/login" className="button-primary">
                                                 Login
-                                            </Disclosure.Button>
+                                            </DisclosureButton>
                                         </div>
                                     )}
                                 </div>
-                            </Disclosure.Panel>
+                            </DisclosurePanel>
                         </>
                     )}
                 </Disclosure>

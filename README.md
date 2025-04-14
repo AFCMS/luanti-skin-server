@@ -30,9 +30,11 @@ and the following libraries:
 
 ## Running Server
 
-### Development (Docker)
+### Development
 
-#### 1. Install `docker`
+While it's possible to develop the server without using Docker, it's much easier so only this method is documented.
+
+#### 1. Install Docker
 
 Follow the official guide for your OS.
 
@@ -51,73 +53,26 @@ Follow the official guide for your OS.
 
 > [!WARNING]
 > You need a [BuildKit](https://docs.docker.com/build/buildkit) enabled version of Docker to build the image.
+>
+> In general both the image and the included Compose files use modern features of Docker and Docker Compose.
 
-#### 2. Download source code
+#### 2. Install NodeJS
+
+Install NodeJS v22 (`lts/jod`) following the [instructions](https://nodejs.org) for your system. I use [**nvm**](https://github.com/nvm-sh/nvm) under Linux.
+
+Then enable PNPM:
+
+```shell
+corepack enable pnpm
+```
+
+#### 3. Download source code
 
 ```shell
 git clone https://github.com/AFCMS/luanti-skin-server && cd luanti-skin-server
 ```
 
-#### 3. Configure server
-
-```shell
-cp exemple.env .env
-```
-
-Edit the `.env` file with the config you want.
-
-A typical production config would be:
-
-```ini
-MT_SKIN_SERVER_DATABASE_LOGGING=false
-
-MT_SKIN_SERVER_DB_HOST=db
-MT_SKIN_SERVER_DB_USER=user
-MT_SKIN_SERVER_DB_PASSWORD=azerty
-MT_SKIN_SERVER_DB_PORT=5432
-MT_SKIN_SERVER_DB_NAME=skin_server
-```
-
-#### 4. Run services
-
-```shell
-docker compose -f compose.dev.yml up --build
-```
-
-You will now have access to the app (both frontend and API) at `http://localhost:8080`. Doing changes to the frontend
-files will trigger fast refresh without needing to restart the entire app.
-
-### Development (host, not recommended)
-
-It's possible to run the server without Docker, but it's not recommended.
-
-#### 1. Install Go, NodeJS and Oxipng
-
-Follow the official guides for you OS.
-
-I recommend using NodeJS v20 installed using [**nvm**](https://github.com/nvm-sh/nvm) under linux.
-
-Oxipng instructions can be found [here](https://github.com/shssoichiro/oxipng)
-
-#### 2. Download source code
-
-```shell
-git clone https://github.com/AFCMS/luanti-skin-server && cd luanti-skin-server
-```
-
-#### 3. Install Go dependencies
-
-```shell
-go mod download
-```
-
-#### 4. Install NodeJS dependencies
-
-```shell
-cd frontend && npm install --include=dev && cd ..
-```
-
-#### 5. Configure server
+#### 4. Configure server
 
 ```shell
 cp exemple.env .env
@@ -137,54 +92,72 @@ MT_SKIN_SERVER_DB_PORT=5432
 MT_SKIN_SERVER_DB_NAME=skin_server
 ```
 
-You need a PostgreSQL database running on the given host and port.
+#### 5. Run services
 
-#### 6. Frontend
-
-The frontend served by the Fiber backend can be build before running the app and served statically, the Vite development
-server can also be proxied by the backend to avoid rebuilding everytime.
-
-Static files can be built like this before launching the server:
+Run backend:
 
 ```shell
-cd frontend && npm run build && cd ..
+COMPOSE_BAKE=true docker compose -f compose.dev.yml up --build --watch
 ```
 
-If you want to use Vite's development server, you can run it like this:
+Run frontend:
 
 ```shell
-cd frontend && npm run dev
+cd frontend && pnpm install --include=dev && pnpm run dev
 ```
 
-With the following additional configuration in the `.env` file:
-
-```ini
-MT_SKIN_SERVER_FRONTEND_DEV_MODE=true
-MT_SKIN_SERVER_FRONTEND_URL=http://localhost:5173
-```
-
-> [!CAUTION]
-> The Vite server configuation makes it exposed on your local network by default to make it accessible in Docker, you
-> can change this
-> behaviour in the Vite configuration.
-
-#### 7. Build and run backend
-
-```shell
-go build && ./luanti-skin-server
-```
+You will now have access to the app (both frontend and API) at `http://127.0.0.1:8081`. Doing changes to the frontend
+files will trigger fast refresh without needing to restart the entire app.
 
 ### Production
 
-There is an [exemple](https://github.com/AFCMS/luanti-skin-server/blob/master/compose.prod.yml) production Docker
-Compose file in the repository.
+The supported method to run the server in production is using Docker Compose:
 
+```yaml
+---
+services:
+  db:
+    image: "postgres:17.4-alpine"
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=${MT_SKIN_SERVER_DB_USER}
+      - POSTGRES_PASSWORD=${MT_SKIN_SERVER_DB_PASSWORD}
+      - POSTGRES_DB=${MT_SKIN_SERVER_DB_NAME}
+      - DATABASE_HOST=${MT_SKIN_SERVER_DB_HOST}
+    expose:
+      - 5432
+    volumes:
+      - db:/var/lib/postgresql/data
+
+  server:
+    image: ghcr.io/afcms/luanti-skin-server:master
+    environment:
+      - MT_SKIN_SERVER_DB_USER=${MT_SKIN_SERVER_DB_USER}
+      - MT_SKIN_SERVER_DB_PASSWORD=${MT_SKIN_SERVER_DB_PASSWORD}
+      - MT_SKIN_SERVER_DB_NAME=${MT_SKIN_SERVER_DB_NAME}
+      - MT_SKIN_SERVER_DB_HOST=${MT_SKIN_SERVER_DB_HOST}
+      - MT_SKIN_SERVER_DB_PORT=${MT_SKIN_SERVER_DB_PORT}
+      - MT_SKIN_SERVER_DATABASE_LOGGING=${MT_SKIN_SERVER_DATABASE_LOGGING}
+      - MT_SKIN_SERVER_OAUTH_REDIRECT_HOST=${MT_SKIN_SERVER_OAUTH_REDIRECT_HOST}
+      - MT_SKIN_SERVER_OAUTH_CONTENTDB_CLIENT_ID=${MT_SKIN_SERVER_OAUTH_CONTENTDB_CLIENT_ID}
+      - MT_SKIN_SERVER_OAUTH_CONTENTDB_CLIENT_SECRET=${MT_SKIN_SERVER_OAUTH_CONTENTDB_CLIENT_SECRET}
+      - MT_SKIN_SERVER_OAUTH_GITHUB_CLIENT_ID=${MT_SKIN_SERVER_OAUTH_GITHUB_CLIENT_ID}
+      - MT_SKIN_SERVER_OAUTH_GITHUB_CLIENT_SECRET=${MT_SKIN_SERVER_OAUTH_GITHUB_CLIENT_SECRET}
+      - MT_SKIN_SERVER_FRONTEND_DEV_MODE=false
+      - MT_SKIN_SERVER_VERIFICATION_GOOGLE_SEARCH_CONSOLE=${MT_SKIN_SERVER_VERIFICATION_GOOGLE_SEARCH_CONSOLE}
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+
+volumes:
+  db:
+```
 It uses the [production image](https://github.com/AFCMS/luanti-skin-server/pkgs/container/luanti-skin-server) built
-by the GitHub Actions workflow, which supports `amd64` and `arm64` architectures.
+by the GitHub Actions workflow, which is based on `scratch` and supports `amd64` and `arm64` architectures.
 
 ```shell
-docker pull ghcr.io/afcms/luanti-skin-server:master
-docker compose -f compose.prod.yml up
+docker compose up
 ```
 
 You can verify that the image have been really built by the GitHub Actions workflow and find the build log using the GitHub CLI:

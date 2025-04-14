@@ -3,7 +3,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/solid";
 import { SiCodeberg, SiDiscord, SiGithub } from "react-icons/si";
-import { AppContext } from "../../services/AppContext.tsx";
+//import { AppContext } from "../../services/AppContext.tsx";
 import ApiUrls from "../../services/api_urls";
 import cdbLogo from "../../assets/content_db_logo.png";
 
@@ -16,7 +16,7 @@ function Login() {
     const [loading, setLoading] = useState(false);
     const [err, setErr] = useState<string | null>(null);
 
-    const { loggedIn, availableProviders } = useContext(AppContext);
+    //const { loggedIn, availableProviders } = useContext(AppContext);
 
     useEffect(() => {
         if (username === "" || password === "") {
@@ -29,7 +29,7 @@ function Login() {
     const navigate = useNavigate();
 
     // Navigate to homepage if already authenticated
-    if (loggedIn) {
+    if (true) {
         return <Navigate to="/" />;
     }
 

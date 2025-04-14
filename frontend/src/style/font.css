@@ -1,7 +1,0 @@
-.panel-text-heading {
-    @apply select-none font-sans text-xl font-medium text-slate-800;
-}
-
-.panel-text-link {
-    @apply font-medium text-blue-500 after:content-["_↗"];
-}

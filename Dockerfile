@@ -33,40 +33,64 @@ RUN --mount=type=cache,id=gomod,target="/go/pkg/mod" \
     CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -ldflags="-s -w" -o luanti-skin-server .
 
 # Build Frontend
-FROM --platform=$BUILDPLATFORM node:20-alpine3.21 AS frontend-builder
+FROM --platform=$BUILDPLATFORM node:22-alpine3.21 AS frontend-builder
+
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable pnpm
 
 WORKDIR /frontend
 
 COPY ./frontend/package.json ./
-COPY ./frontend/package-lock.json ./
-RUN --mount=type=cache,id=npmmod,target="/root/.npm" npm ci
+COPY ./frontend/pnpm-lock.yaml ./
+COPY ./frontend/pnpm-workspace.yaml ./
+RUN --mount=type=cache,id=pnpm,target="/pnpm/store" pnpm install --frozen-lockfile
 
 COPY ./frontend ./
-RUN npm run build
+RUN pnpm run build
 
 FROM ghcr.io/shssoichiro/oxipng:v9.1.4 AS oxipng
 
-# Production Image
-FROM alpine:3.21 AS production
+# Base for the user/tz/ca-certificates
+FROM alpine:3.21 AS base-alpine
+
+RUN apk add --no-cache tzdata ca-certificates
+RUN adduser \
+    --gecos "" \
+    --system \
+    --no-create-home \
+    --uid "900" \
+    "appuser"
+
+# Common base
+FROM scratch AS base
+
+COPY --from=base-alpine /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+COPY --from=base-alpine /usr/share/zoneinfo /usr/share/
+COPY --from=base-alpine /etc/passwd /etc/passwd
 
 COPY --from=oxipng /usr/local/bin/oxipng /usr/local/bin/oxipng
 
-RUN adduser \
-    --disabled-password \
-    --gecos "" \
-    --home "/nonexistent" \
-    --shell "/sbin/nologin" \
-    --no-create-home \
-    --uid "10001" \
-    "appuser"
-
-COPY --from=builder /app/luanti-skin-server /app/
-COPY --from=builder /app/index.gohtml /app/
-COPY --from=frontend-builder /frontend/dist /app/frontend/dist
-
-USER appuser:appuser
-
+USER appuser
 WORKDIR /app
 
+# Development Image
+FROM base AS development
+
 EXPOSE 8080
+
+COPY --from=builder /app/index.gohtml /app/
+COPY --from=builder /app/luanti-skin-server /app/
+
+CMD ["/app/luanti-skin-server"]
+
+# Production Image
+FROM base AS production
+
+EXPOSE 8080
+
+COPY --from=builder /app/index.gohtml /app/
+COPY --from=builder /app/luanti-skin-server /app/
+COPY --from=frontend-builder /frontend/dist /app/frontend/dist
+
 CMD ["/app/luanti-skin-server"]
