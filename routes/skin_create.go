@@ -51,7 +51,12 @@ func SkinCreate(c fiber.Ctx) error {
 	// Extract head
 	var headBuffer bytes.Buffer
 
-	headImg := utils.SkinExtractHead(img)
+	rgbaImg, err := utils.ImageToRGBA(img)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(utils.ErrorOutput{Message: "Invalid image type", Data: "Image is not of type RGBA"})
+	}
+
+	headImg := utils.SkinExtractHead(&rgbaImg)
 	err = png.Encode(&headBuffer, headImg)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(utils.ErrorOutput{Message: "Server error", Data: "Cannot extract head from image"})
