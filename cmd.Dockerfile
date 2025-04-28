@@ -32,7 +32,7 @@ RUN --mount=type=cache,id=gomod,target="/go/pkg/mod" \
     --mount=type=cache,id=gobuild,target="/root/.cache/go-build" \
     CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -ldflags="-s -w" -o luanti-skin-converter ./cmd/main.go
 
-FROM ghcr.io/shssoichiro/oxipng:v9.1.4 AS oxipng
+FROM ghcr.io/shssoichiro/oxipng:v9.1.5 AS oxipng
 
 # Base for the user/tz/ca-certificates
 FROM alpine:3.21 AS base-alpine
