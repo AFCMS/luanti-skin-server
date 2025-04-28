@@ -20,7 +20,7 @@ env:
   # Use docker.io for Docker Hub if empty
   REGISTRY: ghcr.io
   # github.repository as <account>/<repo>
-  IMAGE_NAME: ${{ github.repository }}
+  IMAGE_NAME: ${{ github.repository_owner }}/luanti-skin-
 
 jobs:
   publish:
@@ -31,6 +31,15 @@ jobs:
       id-token: write
       attestations: write
 
+    strategy:
+      matrix:
+        include:
+          - image: server
+            dockerfile: Dockerfile
+            title: Luanti Skin Server
+          - image: converter
+            dockerfile: cmd.Dockerfile
+            title: Luanti Skin Converter
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -58,9 +67,9 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5.7.0
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ matrix.image }}
           labels: |
-            org.opencontainers.image.title=Minetest Skin Server
+            org.opencontainers.image.title=${{ matrix.title }}
 
       # Build and push Docker image with Buildx (don't push on PR)
       # https://github.com/docker/build-push-action
@@ -69,6 +78,7 @@ jobs:
         uses: docker/build-push-action@v6.15.0
         with:
           context: .
+          file: ${{ matrix.dockerfile }}
           platforms: linux/amd64,linux/arm64
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
@@ -81,6 +91,6 @@ jobs:
         if: github.event_name != 'pull_request'
         uses: actions/attest-build-provenance@v2.2.3
         with:
-          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ matrix.image }}
           subject-digest: ${{ steps.build-and-push.outputs.digest }}
           push-to-registry: false
