@@ -49,7 +49,7 @@ RUN --mount=type=cache,id=pnpm,target="/pnpm/store" pnpm install --frozen-lockfi
 COPY ./frontend ./
 RUN pnpm run build
 
-FROM ghcr.io/shssoichiro/oxipng:v9.1.4 AS oxipng
+FROM ghcr.io/shssoichiro/oxipng:v9.1.5 AS oxipng
 
 # Base for the user/tz/ca-certificates
 FROM alpine:3.21 AS base-alpine
