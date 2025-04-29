@@ -7,7 +7,6 @@ import (
 	"luanti-skin-server/models"
 	"luanti-skin-server/utils"
 	"mime/multipart"
-	"sync"
 	"time"
 
 	"github.com/gofiber/fiber/v3"
