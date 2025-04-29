@@ -1,10 +1,10 @@
 package routes
 
 import (
+	"embed"
 	"encoding/json"
-	"fmt"
+	"io/fs"
 	"log"
-	"os"
 
 	"github.com/gofiber/fiber/v3"
 	"github.com/gofiber/fiber/v3/middleware/proxy"
@@ -15,6 +15,9 @@ import (
 	"luanti-skin-server/backend/models"
 	"luanti-skin-server/backend/utils"
 )
+
+//go:embed all:dist
+var distFS embed.FS
 
 func SetupRoutes(app *fiber.App) {
 	// API Routes
@@ -81,9 +84,14 @@ func SetupRoutes(app *fiber.App) {
 			},
 		}))
 	} else {
+		distFS, err := fs.Sub(distFS, "dist")
+		if err != nil {
+			log.Fatalln("Failed to access dist:", err)
+		}
+
 		// Parse JSON Vite manifest
 		manifest := utils.ViteManifest{}
-		data, err := os.ReadFile("./frontend/dist/.vite/manifest.json")
+		data, err := fs.ReadFile(distFS, ".vite/manifest.json")
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -92,14 +100,12 @@ func SetupRoutes(app *fiber.App) {
 			log.Fatal(err)
 		}
 
-		app.Get("/", static.New("./frontend/dist", static.Config{
+		app.Use(static.New("/", static.Config{
+			FS:       distFS,
 			Compress: true,
-		}), func(ctx fiber.Ctx) error {
-			ctx.Response().Header.Set(fiber.HeaderCacheControl, fmt.Sprintf("public, max-age=%d", 60*60*24*30*6))
-			return nil
-		})
+		}))
 
-		app.Get("*", func(c fiber.Ctx) error {
+		app.Get("/*", func(c fiber.Ctx) error {
 			return c.Render("index", fiber.Map{
 				"DevMode":                false,
 				"MainCSS":                manifest["src/main.tsx"].Css[0],

@@ -2,7 +2,7 @@
 # check=error=true
 
 # Build Backend
-FROM --platform=$BUILDPLATFORM golang:1.24-alpine3.21 AS builder
+FROM --platform=$BUILDPLATFORM golang:1.24-alpine3.21 AS builder-base
 
 LABEL org.opencontainers.image.title="Luanti Skin Server"
 LABEL org.opencontainers.image.description="Skin server for the Luanti engine"
@@ -27,14 +27,8 @@ RUN --mount=type=cache,id=gomod,target="/go/pkg/mod" go mod verify
 COPY ./common ./common
 COPY ./backend ./backend
 
-# Build with cache
-# https://dev.to/jacktt/20x-faster-golang-docker-builds-289n
-RUN --mount=type=cache,id=gomod,target="/go/pkg/mod" \
-    --mount=type=cache,id=gobuild,target="/root/.cache/go-build" \
-    CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -ldflags="-s -w" -o luanti-skin-server ./backend/main.go
-
 # Build Frontend
-FROM --platform=$BUILDPLATFORM node:22-alpine3.21 AS frontend-builder
+FROM --platform=$BUILDPLATFORM node:22-alpine3.21 AS builder-frontend
 
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
@@ -49,6 +43,25 @@ RUN --mount=type=cache,id=pnpm,target="/pnpm/store" pnpm install --frozen-lockfi
 
 COPY ./frontend ./
 RUN pnpm run build
+
+FROM --platform=$BUILDPLATFORM builder-base AS builder-prod
+
+COPY --from=builder-frontend /frontend/dist ./backend/routes/dist
+
+# Build with cache
+# https://dev.to/jacktt/20x-faster-golang-docker-builds-289n
+RUN --mount=type=cache,id=gomod,target="/go/pkg/mod" \
+    --mount=type=cache,id=gobuild,target="/root/.cache/go-build" \
+    CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -ldflags="-s -w" -o luanti-skin-server ./backend/main.go
+
+FROM --platform=$BUILDPLATFORM builder-base AS builder-dev
+
+# Build with cache
+# https://dev.to/jacktt/20x-faster-golang-docker-builds-289n
+RUN --mount=type=cache,id=gomod,target="/go/pkg/mod" \
+    --mount=type=cache,id=gobuild,target="/root/.cache/go-build" \
+    CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -ldflags="-s -w" -o luanti-skin-server ./backend/main.go
+
 
 FROM ghcr.io/shssoichiro/oxipng:v9.1.5 AS oxipng
 
@@ -75,23 +88,16 @@ COPY --from=oxipng /usr/local/bin/oxipng /usr/local/bin/oxipng
 USER appuser
 WORKDIR /app
 
+EXPOSE 8080
+
+ENTRYPOINT ["/app/luanti-skin-server"]
+
 # Development Image
 FROM base AS development
 
-EXPOSE 8080
-
-COPY --from=builder /app/index.gohtml /app/
-COPY --from=builder /app/luanti-skin-server /app/
-
-CMD ["/app/luanti-skin-server"]
+COPY --from=builder-dev /app/luanti-skin-server /app/
 
 # Production Image
 FROM base AS production
 
-EXPOSE 8080
-
-COPY --from=builder /app/index.gohtml /app/
-COPY --from=builder /app/luanti-skin-server /app/
-COPY --from=frontend-builder /frontend/dist /app/frontend/dist
-
-CMD ["/app/luanti-skin-server"]
+COPY --from=builder-prod /app/luanti-skin-server /app/

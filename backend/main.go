@@ -1,7 +1,10 @@
 package main
 
 import (
+	"embed"
+	"io/fs"
 	"log"
+	"net/http"
 
 	"github.com/gofiber/fiber/v3"
 	"github.com/gofiber/fiber/v3/middleware/compress"
@@ -15,6 +18,9 @@ import (
 	"luanti-skin-server/backend/routes"
 	"luanti-skin-server/common/oxipng"
 )
+
+//go:embed routes/templates
+var templatesFS embed.FS
 
 func main() {
 	// Check for Oxipng installation
@@ -30,7 +36,11 @@ func main() {
 	database.ConnectDB()
 
 	// Create template engine
-	engine := html.New("./", ".gohtml")
+	tmplFS, err := fs.Sub(templatesFS, "routes/templates")
+	if err != nil {
+		log.Fatalln("Failed to access templates:", err)
+	}
+	engine := html.NewFileSystem(http.FS(tmplFS), ".gohtml")
 
 	// Init Web Server
 	app := fiber.New(fiber.Config{
@@ -59,5 +69,5 @@ func main() {
 
 	routes.SetupRoutes(app)
 
-	log.Fatalln(app.Listen(":8081"))
+	log.Fatalln(app.Listen(":8080"))
 }

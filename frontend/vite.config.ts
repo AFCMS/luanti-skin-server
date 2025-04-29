@@ -21,7 +21,7 @@ export default defineConfig({
         hmr: {
             protocol: "ws",
             port: 5173,
-        }
+        },
     },
     plugins: [react(), tailwindcss()],
     assetsInclude: ["**/*.gltf"],

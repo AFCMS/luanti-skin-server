@@ -18,5 +18,6 @@ utils/**/*.png
 LICENSE
 # Build output
 luanti-skin-server
+luanti-skin-converter
 *.md
 .env
