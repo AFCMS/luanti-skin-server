@@ -8,10 +8,10 @@
 
 This server is made for serving Luanti skins to Luanti servers. It is licensed under GPLv3.
 
-- ✅ Easy to use and powerful **API**
-- ✅ Skins compatible with both [**VoxeLibre**](https://content.luanti.org/packages/Wuzzy/mineclone2) and [**Minetest Game**](https://content.luanti.org/packages/Luanti/minetest_game)
-- ✅ Fast and reliable, thanks to [**Docker**](https://www.docker.com), [**Golang**](https://go.dev), [**Fiber**](https://gofiber.io) and [**PostgreSQL**](https://www.postgresql.org)
-- ✅ Optimised images using [**Oxipng**](https://github.com/shssoichiro/oxipng)
+-   ✅ Easy to use and powerful **API**
+-   ✅ Skins compatible with both [**VoxeLibre**](https://content.luanti.org/packages/Wuzzy/mineclone2) and [**Minetest Game**](https://content.luanti.org/packages/Luanti/minetest_game)
+-   ✅ Fast and reliable, thanks to [**Docker**](https://www.docker.com), [**Golang**](https://go.dev), [**Fiber**](https://gofiber.io) and [**PostgreSQL**](https://www.postgresql.org)
+-   ✅ Optimised images using [**Oxipng**](https://github.com/shssoichiro/oxipng)
 
 ## Design
 
@@ -22,11 +22,11 @@ It uses also the [**GORM**](https://gorm.io) library for interacting with the da
 The frontend is build with the [**React**](https://react.dev) library, the [**Vite**](https://vite.dev) framework
 and the following libraries:
 
-- [**TailwindCSS**](https://tailwindcss.com) for styling
-- [**HeadlessUI**](https://headlessui.com) for dialogs, combobox, etc
-- [**Heroicons**](https://heroicons.com) for most icons
-- [**React Router**](https://reactrouter.com)
-- [**React Three Fiber**](https://github.com/pmndrs/react-three-fiber) for the 3D preview of skins
+-   [**TailwindCSS**](https://tailwindcss.com) for styling
+-   [**HeadlessUI**](https://headlessui.com) for dialogs, combobox, etc
+-   [**Heroicons**](https://heroicons.com) for most icons
+-   [**React Router**](https://reactrouter.com)
+-   [**React Three Fiber**](https://github.com/pmndrs/react-three-fiber) for the 3D preview of skins
 
 ## Running Server
 
@@ -38,10 +38,10 @@ While it's possible to develop the server without using Docker, it's much easier
 
 Follow the official guide for your OS.
 
-- [Ubuntu](https://docs.docker.com/engine/install/ubuntu)
-- [Debian](https://docs.docker.com/engine/install/debian)
-- [Fedora](https://docs.docker.com/engine/install/fedora)
-- [RHEL/CentOS](https://docs.docker.com/engine/install/centos)
+-   [Ubuntu](https://docs.docker.com/engine/install/ubuntu)
+-   [Debian](https://docs.docker.com/engine/install/debian)
+-   [Fedora](https://docs.docker.com/engine/install/fedora)
+-   [RHEL/CentOS](https://docs.docker.com/engine/install/centos)
 
 > [!NOTE]
 > The installation links are from Docker Engine, which works only under Linux.
@@ -106,7 +106,7 @@ Run frontend:
 cd frontend && pnpm install --include=dev && pnpm run dev
 ```
 
-You will now have access to the app (both frontend and API) at `http://127.0.0.1:8081`. Doing changes to the frontend
+You will now have access to the app (both frontend and API) at `http://127.0.0.1:8080`. Doing changes to the frontend
 files will trigger fast refresh without needing to restart the entire app.
 
 ### Production
@@ -116,43 +116,44 @@ The supported method to run the server in production is using Docker Compose:
 ```yaml
 ---
 services:
-  db:
-    image: "postgres:17.4-alpine"
-    restart: unless-stopped
-    environment:
-      - POSTGRES_USER=${MT_SKIN_SERVER_DB_USER}
-      - POSTGRES_PASSWORD=${MT_SKIN_SERVER_DB_PASSWORD}
-      - POSTGRES_DB=${MT_SKIN_SERVER_DB_NAME}
-      - DATABASE_HOST=${MT_SKIN_SERVER_DB_HOST}
-    expose:
-      - 5432
-    volumes:
-      - db:/var/lib/postgresql/data
+    db:
+        image: "postgres:17.4-alpine"
+        restart: unless-stopped
+        environment:
+            - POSTGRES_USER=${MT_SKIN_SERVER_DB_USER}
+            - POSTGRES_PASSWORD=${MT_SKIN_SERVER_DB_PASSWORD}
+            - POSTGRES_DB=${MT_SKIN_SERVER_DB_NAME}
+            - DATABASE_HOST=${MT_SKIN_SERVER_DB_HOST}
+        expose:
+            - 5432
+        volumes:
+            - db:/var/lib/postgresql/data
 
-  server:
-    image: ghcr.io/afcms/luanti-skin-server:master
-    environment:
-      - MT_SKIN_SERVER_DB_USER=${MT_SKIN_SERVER_DB_USER}
-      - MT_SKIN_SERVER_DB_PASSWORD=${MT_SKIN_SERVER_DB_PASSWORD}
-      - MT_SKIN_SERVER_DB_NAME=${MT_SKIN_SERVER_DB_NAME}
-      - MT_SKIN_SERVER_DB_HOST=${MT_SKIN_SERVER_DB_HOST}
-      - MT_SKIN_SERVER_DB_PORT=${MT_SKIN_SERVER_DB_PORT}
-      - MT_SKIN_SERVER_DATABASE_LOGGING=${MT_SKIN_SERVER_DATABASE_LOGGING}
-      - MT_SKIN_SERVER_OAUTH_REDIRECT_HOST=${MT_SKIN_SERVER_OAUTH_REDIRECT_HOST}
-      - MT_SKIN_SERVER_OAUTH_CONTENTDB_CLIENT_ID=${MT_SKIN_SERVER_OAUTH_CONTENTDB_CLIENT_ID}
-      - MT_SKIN_SERVER_OAUTH_CONTENTDB_CLIENT_SECRET=${MT_SKIN_SERVER_OAUTH_CONTENTDB_CLIENT_SECRET}
-      - MT_SKIN_SERVER_OAUTH_GITHUB_CLIENT_ID=${MT_SKIN_SERVER_OAUTH_GITHUB_CLIENT_ID}
-      - MT_SKIN_SERVER_OAUTH_GITHUB_CLIENT_SECRET=${MT_SKIN_SERVER_OAUTH_GITHUB_CLIENT_SECRET}
-      - MT_SKIN_SERVER_FRONTEND_DEV_MODE=false
-      - MT_SKIN_SERVER_VERIFICATION_GOOGLE_SEARCH_CONSOLE=${MT_SKIN_SERVER_VERIFICATION_GOOGLE_SEARCH_CONSOLE}
-    ports:
-      - "8080:8080"
-    depends_on:
-      - db
+    server:
+        image: ghcr.io/afcms/luanti-skin-server:master
+        environment:
+            - MT_SKIN_SERVER_DB_USER=${MT_SKIN_SERVER_DB_USER}
+            - MT_SKIN_SERVER_DB_PASSWORD=${MT_SKIN_SERVER_DB_PASSWORD}
+            - MT_SKIN_SERVER_DB_NAME=${MT_SKIN_SERVER_DB_NAME}
+            - MT_SKIN_SERVER_DB_HOST=${MT_SKIN_SERVER_DB_HOST}
+            - MT_SKIN_SERVER_DB_PORT=${MT_SKIN_SERVER_DB_PORT}
+            - MT_SKIN_SERVER_DATABASE_LOGGING=${MT_SKIN_SERVER_DATABASE_LOGGING}
+            - MT_SKIN_SERVER_OAUTH_REDIRECT_HOST=${MT_SKIN_SERVER_OAUTH_REDIRECT_HOST}
+            - MT_SKIN_SERVER_OAUTH_CONTENTDB_CLIENT_ID=${MT_SKIN_SERVER_OAUTH_CONTENTDB_CLIENT_ID}
+            - MT_SKIN_SERVER_OAUTH_CONTENTDB_CLIENT_SECRET=${MT_SKIN_SERVER_OAUTH_CONTENTDB_CLIENT_SECRET}
+            - MT_SKIN_SERVER_OAUTH_GITHUB_CLIENT_ID=${MT_SKIN_SERVER_OAUTH_GITHUB_CLIENT_ID}
+            - MT_SKIN_SERVER_OAUTH_GITHUB_CLIENT_SECRET=${MT_SKIN_SERVER_OAUTH_GITHUB_CLIENT_SECRET}
+            - MT_SKIN_SERVER_FRONTEND_DEV_MODE=false
+            - MT_SKIN_SERVER_VERIFICATION_GOOGLE_SEARCH_CONSOLE=${MT_SKIN_SERVER_VERIFICATION_GOOGLE_SEARCH_CONSOLE}
+        ports:
+            - "8080:8080"
+        depends_on:
+            - db
 
 volumes:
-  db:
+    db:
 ```
+
 It uses the [production image](https://github.com/AFCMS/luanti-skin-server/pkgs/container/luanti-skin-server) built
 by the GitHub Actions workflow, which is based on `scratch` and supports `amd64` and `arm64` architectures.
 
@@ -161,6 +162,7 @@ docker compose up
 ```
 
 You can verify that the image have been really built by the GitHub Actions workflow and find the build log using the GitHub CLI:
+
 ```shell
 gh attestation verify oci://ghcr.io/afcms/luanti-skin-server:master --repo AFCMS/luanti-skin-server
 ```
@@ -191,16 +193,16 @@ The server supports OAuth2 for authentication, you can set the following environ
 If one of the two variables (client id, client secret) for a provider are not set, OAuth2 will be disabled for that
 provider.
 
-- `MT_SKIN_SERVER_OAUTH_REDIRECT_HOST`: the host where the OAuth2 callback will be redirected to
-- ContentDB:
-    - `MT_SKIN_SERVER_OAUTH_CONTENTDB_CLIENT_ID`: the OAuth2 client ID for the ContentDB API
-    - `MT_SKIN_SERVER_OAUTH_CONTENTDB_CLIENT_SECRET` the OAuth2 client secret for the ContentDB API
-    - `MT_SKIN_SERVER_OAUTH_CONTENTDB_URL`: the URL of the ContentDB instance, default to `https://content.luanti.org`
-    - [Create Application](https://content.luanti.org/user/apps/)
-- GitHub:
-    - `MT_SKIN_SERVER_OAUTH_GITHUB_CLIENT_ID`: the OAuth2 client ID for the GitHub API
-    - `MT_SKIN_SERVER_OAUTH_GITHUB_CLIENT_SECRET` the OAuth2 client secret for the GitHub API
-    - [Create Application](https://github.com/settings/applications/new)
+-   `MT_SKIN_SERVER_OAUTH_REDIRECT_HOST`: the host where the OAuth2 callback will be redirected to
+-   ContentDB:
+    -   `MT_SKIN_SERVER_OAUTH_CONTENTDB_CLIENT_ID`: the OAuth2 client ID for the ContentDB API
+    -   `MT_SKIN_SERVER_OAUTH_CONTENTDB_CLIENT_SECRET` the OAuth2 client secret for the ContentDB API
+    -   `MT_SKIN_SERVER_OAUTH_CONTENTDB_URL`: the URL of the ContentDB instance, default to `https://content.luanti.org`
+    -   [Create Application](https://content.luanti.org/user/apps/)
+-   GitHub:
+    -   `MT_SKIN_SERVER_OAUTH_GITHUB_CLIENT_ID`: the OAuth2 client ID for the GitHub API
+    -   `MT_SKIN_SERVER_OAUTH_GITHUB_CLIENT_SECRET` the OAuth2 client secret for the GitHub API
+    -   [Create Application](https://github.com/settings/applications/new)
 
 ## Development Tools
 
