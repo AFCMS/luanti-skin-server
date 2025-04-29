@@ -34,13 +34,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - image: server
-            dockerfile: Dockerfile
-            title: Luanti Skin Server
-          - image: converter
-            dockerfile: cmd.Dockerfile
-            title: Luanti Skin Converter
+        image: [server, converter]
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -70,7 +65,7 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ matrix.image }}
           labels: |
-            org.opencontainers.image.title=${{ matrix.title }}
+            org.opencontainers.image.title=${{ fromJson('{"server":"Luanti Skin Server","converter":"Luanti Skin Converter"}')[matrix.image] }}
 
       # Build and push Docker image with Buildx (don't push on PR)
       # https://github.com/docker/build-push-action
@@ -79,7 +74,7 @@ jobs:
         uses: docker/build-push-action@v6.16.0
         with:
           context: .
-          file: ${{ matrix.dockerfile }}
+          file: ${{ fromJson('{"server":"Dockerfile","converter":"cmd.Dockerfile"}')[matrix.image] }}
           platforms: linux/amd64,linux/arm64
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
