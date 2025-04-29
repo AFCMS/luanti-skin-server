@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/solid";
-import { SiCodeberg, SiDiscord, SiGithub } from "react-icons/si";
+//import { SiCodeberg, SiDiscord, SiGithub } from "react-icons/si";
 //import { AppContext } from "../../services/AppContext.tsx";
 import ApiUrls from "../../services/api_urls";
-import cdbLogo from "../../assets/content_db_logo.png";
+// import cdbLogo from "../../assets/content_db_logo.png";
 
 function Login() {
     const [username, setUsername] = useState("");
@@ -114,7 +114,7 @@ function Login() {
                         </button>
                     </div>
                     <hr className="my-4" />
-                    <div className="flex flex-col gap-4">
+                    {/* <div className="flex flex-col gap-4">
                         {availableProviders.includes("contentdb") ? (
                             <a
                                 className="button-secondary inline-flex w-full flex-row items-center justify-start gap-x-2"
@@ -151,7 +151,7 @@ function Login() {
                                 <span>Discord</span>
                             </a>
                         ) : null}
-                    </div>
+                    </div> */}
                 </form>
             </div>
         </div>
