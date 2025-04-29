@@ -45,6 +45,9 @@ importers:
         specifier: ^0.176.0
         version: 0.176.0
     devDependencies:
+      '@eslint/js':
+        specifier: ^9.25.1
+        version: 9.25.1
       '@headlessui/tailwindcss':
         specifier: ^0.2.2
         version: 0.2.2(tailwindcss@4.1.4)
