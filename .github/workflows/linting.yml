@@ -26,11 +26,14 @@ jobs:
         with:
           node-version-file: ".nvmrc"
 
+      - name: Enable PNPM
+        run: corepack enable pnpm
+
       - name: Install dependencies
-        run: cd $GITHUB_WORKSPACE/frontend && npm ci
+        run: cd $GITHUB_WORKSPACE/frontend && pnpm install --frozen-lockfile
 
       - name: Lint with ESLint
-        run: cd $GITHUB_WORKSPACE/frontend && npm run lint
+        run: cd $GITHUB_WORKSPACE/frontend && pnpm run lint
 
   GolangCI:
     runs-on: ubuntu-latest
