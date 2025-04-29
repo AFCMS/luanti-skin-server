@@ -1,5 +1,5 @@
 declare namespace ApiTypes {
-    type UserResponse = {
+    interface UserResponse {
         id: number;
         name: string;
         email: string;
@@ -10,7 +10,7 @@ declare namespace ApiTypes {
         last_connection: string;
     };
 
-    type SkinResponse = {
+    interface SkinResponse {
         uuid: string;
         description: string;
         public?: boolean;
@@ -19,7 +19,7 @@ declare namespace ApiTypes {
         creation_date: string;
     };
 
-    type AccountUserResponse = {
+    interface AccountUserResponse {
         id: number;
         username: string;
         permission_level: 1 | 2 | 3 | 4;
@@ -28,7 +28,7 @@ declare namespace ApiTypes {
 
     type InfoProviderTypes = "contentdb" | "github" | "codeberg" | "discord";
 
-    type InfoResponse = {
+    interface InfoResponse {
         account_count: number;
         skin_count: number;
         version: string;

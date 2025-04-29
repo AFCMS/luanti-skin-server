@@ -1,21 +1,12 @@
 import { createContext, ReactNode, useCallback, useEffect, useState } from "react";
 import axios from "axios";
 
-type AuthContextType = {
-    /**
-     * Whether the user is logged in
-     */
+interface AuthContextType {
     loggedIn: boolean;
     loadingUser: boolean;
-    /**
-     * The username of the logged in user
-     */
     username?: string;
     logout: () => Promise<void>;
     checkAuthentication: () => Promise<void>;
-    /**
-     * The availlable OAuth providers
-     */
     availableProviders: ApiTypes.InfoProviderTypes[];
 };
 
