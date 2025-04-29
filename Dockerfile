@@ -24,13 +24,14 @@ COPY go.mod go.sum ./
 RUN --mount=type=cache,id=gomod,target="/go/pkg/mod" go mod download
 RUN --mount=type=cache,id=gomod,target="/go/pkg/mod" go mod verify
 
-COPY . ./
+COPY ./common ./common
+COPY ./backend ./backend
 
 # Build with cache
 # https://dev.to/jacktt/20x-faster-golang-docker-builds-289n
 RUN --mount=type=cache,id=gomod,target="/go/pkg/mod" \
     --mount=type=cache,id=gobuild,target="/root/.cache/go-build" \
-    CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -ldflags="-s -w" -o luanti-skin-server .
+    CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -ldflags="-s -w" -o luanti-skin-server ./backend/main.go
 
 # Build Frontend
 FROM --platform=$BUILDPLATFORM node:22-alpine3.21 AS frontend-builder

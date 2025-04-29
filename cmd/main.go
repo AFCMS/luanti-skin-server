@@ -5,10 +5,11 @@ import (
 	"image"
 	"image/png"
 	"log"
-	"luanti-skin-server/utils"
 	"os"
 
 	"github.com/urfave/cli/v3"
+
+	"luanti-skin-server/common/skins"
 )
 
 func LoadImageFromFile(src string) (*image.RGBA, error) {
@@ -32,7 +33,7 @@ func LoadImageFromFile(src string) (*image.RGBA, error) {
 		return nil, err
 	}
 
-	rgbImage, err := utils.ImageToRGBA(img)
+	rgbImage, err := skins.ImageToRGBA(img)
 	if err != nil {
 		return nil, err
 	}
@@ -72,7 +73,7 @@ func main() {
 								log.Fatal(err)
 							}
 
-							head := utils.SkinExtractHead(img)
+							head := skins.SkinExtractHead(img)
 
 							outFile, err := os.Create(cmd.StringArg("out"))
 							if err != nil {

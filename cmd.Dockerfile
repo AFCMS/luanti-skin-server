@@ -24,7 +24,8 @@ COPY go.mod go.sum ./
 RUN --mount=type=cache,id=gomod,target="/go/pkg/mod" go mod download
 RUN --mount=type=cache,id=gomod,target="/go/pkg/mod" go mod verify
 
-COPY . ./
+COPY ./common ./common
+COPY ./cmd ./cmd
 
 # Build with cache
 # https://dev.to/jacktt/20x-faster-golang-docker-builds-289n

@@ -1,4 +1,5 @@
 .idea
 .env
 luanti-skin-server
+luanti-skin-converter
 database.db
