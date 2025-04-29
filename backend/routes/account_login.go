@@ -34,9 +34,9 @@ func AccountLogin(c fiber.Ctx) error {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"message": "Incorrect password"})
 	}
 
-	if err != nil {
+	/* if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"message": "Could not login"})
-	}
+	} */
 
 	err = auth.InitSession(c, &user)
 	if err != nil {

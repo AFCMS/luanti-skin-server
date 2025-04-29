@@ -79,7 +79,13 @@ func main() {
 							if err != nil {
 								log.Fatal(err)
 							}
-							defer outFile.Close()
+
+							defer func(file *os.File) {
+								err := file.Close()
+								if err != nil {
+									log.Println(err)
+								}
+							}(outFile)
 
 							err = png.Encode(outFile, head)
 							if err != nil {
