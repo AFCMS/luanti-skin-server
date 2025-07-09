@@ -13,7 +13,6 @@ LABEL io.artifacthub.package.readme-url="https://raw.githubusercontent.com/AFCMS
 LABEL io.artifacthub.package.category="integration-delivery"
 LABEL io.artifacthub.package.keywords="luanti,minetest,skins,server"
 LABEL io.artifacthub.package.license="GPL-3.0-or-later"
-LABEL io.artifacthub.package.logo-url=""
 LABEL io.artifacthub.package.maintainers='[{"name":"AFCMS","email":"afcm.contact@gmail.com"}]'
 
 
