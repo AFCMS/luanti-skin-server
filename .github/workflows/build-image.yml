@@ -66,6 +66,14 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ matrix.image }}
           labels: |
             org.opencontainers.image.title=${{ fromJson('{"server":"Luanti Skin Server","converter":"Luanti Skin Converter"}')[matrix.image] }}
+            org.opencontainers.image.licenses="GPL-3.0-or-later"
+          annotations: |
+            io.artifacthub.package.readme-url="https://raw.githubusercontent.com/AFCMS/luanti-skin-server/refs/heads/master/README.md"
+            io.artifacthub.package.category="integration-delivery"
+            io.artifacthub.package.keywords="luanti,minetest,skins,server,cli"
+            io.artifacthub.package.license="GPL-3.0-or-later"
+            io.artifacthub.package.logo-url=""
+            io.artifacthub.package.maintainers='[{"name":"AFCMS","email":"afcm.contact@gmail.com"}]'
 
       # Build and push Docker image with Buildx (don't push on PR)
       # https://github.com/docker/build-push-action
