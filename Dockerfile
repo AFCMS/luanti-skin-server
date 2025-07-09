@@ -7,8 +7,15 @@ FROM --platform=$BUILDPLATFORM golang:1.24-alpine3.21 AS builder-base
 LABEL org.opencontainers.image.title="Luanti Skin Server"
 LABEL org.opencontainers.image.description="Skin server for the Luanti engine"
 LABEL org.opencontainers.image.authors="AFCMS <afcm.contact@gmail.com>"
-LABEL org.opencontainers.image.licenses="GPL-3.0"
+LABEL org.opencontainers.image.licenses="GPL-3.0-or-later"
 LABEL org.opencontainers.image.source="https://github.com/AFCMS/luanti-skin-server"
+LABEL io.artifacthub.package.readme-url="https://raw.githubusercontent.com/AFCMS/luanti-skin-server/refs/heads/master/README.md"
+LABEL io.artifacthub.package.category="integration-delivery"
+LABEL io.artifacthub.package.keywords="luanti,minetest,skins,server"
+LABEL io.artifacthub.package.license="GPL-3.0-or-later"
+LABEL io.artifacthub.package.logo-url=""
+LABEL io.artifacthub.package.maintainers='[{"name":"AFCMS","email":"afcm.contact@gmail.com"}]'
+
 
 ARG TARGETOS
 ARG TARGETARCH
