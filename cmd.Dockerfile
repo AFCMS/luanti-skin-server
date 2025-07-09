@@ -41,7 +41,7 @@ RUN --mount=type=cache,id=gomod,target="/go/pkg/mod" \
 FROM ghcr.io/shssoichiro/oxipng:v9.1.5 AS oxipng
 
 # Base for the user/tz/ca-certificates
-FROM alpine:3.21 AS base-alpine
+FROM alpine:3.22 AS base-alpine
 
 RUN adduser \
     --gecos "" \
