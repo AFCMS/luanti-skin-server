@@ -2,7 +2,7 @@
 # check=error=true
 
 # Build Backend
-FROM --platform=$BUILDPLATFORM golang:1.24-alpine3.21 AS builder-base
+FROM --platform=$BUILDPLATFORM golang:1.24.5-alpine3.21 AS builder-base
 
 LABEL org.opencontainers.image.title="Luanti Skin Server"
 LABEL org.opencontainers.image.description="Skin server for the Luanti engine"
